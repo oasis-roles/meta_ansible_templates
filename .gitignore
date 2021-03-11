@@ -1,1 +1,6 @@
 .*.swp
+.tox
+.cache
+
+# Used in testing
+ansible_collections
