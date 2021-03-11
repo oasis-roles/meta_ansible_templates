@@ -18,20 +18,4 @@ jobs:
           python -m pip install -U setuptools pip
           pip install -U ansible tox
       - name: test collections and roles can be created
-        run: |-
-          set -ex
-          mkdir -p ansible_collections
-          cd ansible_collections
-          # Tests basic sanitation, that it will initialize the skeleton
-          ansible-galaxy collection init --collection-skeleton "${{ github.workspace }}/collection" test_ns.test_collection
-          /bin/bash test_ns/test_collection/setup.sh
-          cd test_ns/test_collection/roles
-          # Create a test role
-          ansible-galaxy init --role-skeleton "${{ github.workspace }}/role" test_role
-          echo "
-          def test_true(host):
-              assert 1 == 1" > test_role/molecule/docker/tests/test_null.py
-          # Run molecule
-          cd ..
-          tox -e lint_all
-          tox --ansible-driver docker
+        run: ./test_run.sh

@@ -1,6 +1,6 @@
 name: Test with Ansible
 
-on:
+"on":
   push:
     paths-ignore:
       - README.md
@@ -18,7 +18,7 @@ jobs:
   collect:
     runs-on: ubuntu-latest
     outputs:
-      scenarios: {% raw %}${{ steps.collection.outputs.scenarios }}{% endraw %}
+      scenarios: "{% raw %}${{ steps.collection.outputs.scenarios }}{% endraw %}"
     steps:
       - uses: actions/checkout@v2
         with:
@@ -42,15 +42,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        scenario: {% raw %}${{ fromJson(needs.collect.outputs.scenarios) }}{% endraw %}
+        scenario: "{% raw %}${{ fromJson(needs.collect.outputs.scenarios) }}{% endraw %}"
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: 'recursive'
-          path: {% raw %}${{ env.checkout_path }}{% endraw %}
+          path: "{% raw %}${{ env.checkout_path }}{% endraw %}"
       - name: update submodules
         run: |
-          cd {% raw %}"${{ env.checkout_path }}"{% endraw %}
+          cd "{% raw %}${{ env.checkout_path }}{% endraw %}"
           git submodule update --remote --recursive
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -58,14 +58,14 @@ jobs:
         run: |
           set -ex
           python -m pip install --upgrade tox
-      - name: Run tox against {% raw %}${{ matrix.scenario }}{% endraw %}
+      - name: Run tox against "{% raw %}${{ matrix.scenario }}{% endraw %}"
         run: |
           set -ex
           # There is some magic in the "mv" command that makes ansible-galaxy work
           # I haven't found any logic for it, but if you don't do this mv, then
           # the dependency step in molecule when run from tox will fail
           mv ansible_collections ~/work/
-          {% raw %}cd ~/work/${{ env.checkout_path }}{% endraw %}
+          {% raw %}cd "~/work/${{ env.checkout_path }}{% endraw %}"
           tox -e "{% raw %}${{ matrix.scenario }}{% endraw %}"
 
   release:
@@ -78,11 +78,11 @@ jobs:
           submodules: 'recursive'
       - uses: artis3n/ansible_galaxy_collection@v2.2.1
         with:
-          api_key: {% raw %}${{ secrets.GALAXY_API_KEY }}{% endraw %}
+          api_key: "{% raw %}${{ secrets.GALAXY_API_KEY }}{% endraw %}"
       - name: Release artifacts to Git Hub
         uses: ncipollo/release-action@v1
         with:
           artifacts: ./{{ namespace }}-{{ collection_name }}*.tar.gz
           allowUpdates: true
-          name: Release {% raw %}${{ github.ref }}{% endraw %}
-          token: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
+          name: "Release {% raw %}${{ github.ref }}{% endraw %}"
+          token: "{% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}"
