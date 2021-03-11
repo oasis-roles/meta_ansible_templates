@@ -23,11 +23,11 @@ jobs:
           mkdir -p ansible_collections
           cd ansible_collections
           # Tests basic sanitation, that it will initialize the skeleton
-          ansible-galaxy collection init --collection-skeleton "${{ github.workspace }}/ansible_collection_template" test_ns.test_collection
+          ansible-galaxy collection init --collection-skeleton "${{ github.workspace }}/collection" test_ns.test_collection
           test_ns/test_collection/setup.sh
           cd test_ns/test_collection/roles
           # Create a test role
-          ansible-galaxy init --role-skeleton "${{ github.workspace }}/meta_skeleton" test_role
+          ansible-galaxy init --role-skeleton "${{ github.workspace }}/role" test_role
           echo "
 
           def test_true(host):
