@@ -29,7 +29,6 @@ jobs:
           # Create a test role
           ansible-galaxy init --role-skeleton "${{ github.workspace }}/role" test_role
           echo "
-
           def test_true(host):
               assert 1 == 1" > test_role/molecule/docker/tests/test_null.py
           # Run molecule
