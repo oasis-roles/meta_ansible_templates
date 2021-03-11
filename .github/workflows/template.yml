@@ -8,35 +8,23 @@ on:
 
 jobs:
   do_template:
-    # Limit this to run only on the template repo
-    if: github.repository == 'oasis-roles/meta_ansible_collection_template'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          path: ansible_collection_template
-      - uses: actions/checkout@v2
-        with:
-          repository: oasis-roles/meta_skeleton
-          path: meta_skeleton
-      - uses: actions/checkout@v2
-        with:
-          repository: oasis-roles/meta_test
-          path: tests
-      - uses: actions/setup-python@v1
+      - uses: actions/setup-python@v2
       - name: install dependencies
         run: |-
           set -ex
           python -m pip install -U setuptools pip
           pip install -U ansible tox
-      - name: test collection works well
+      - name: test collections and roles can be created
         run: |-
           set -ex
+          mkdir -p ansible_collections
+          cd ansible_collections
           # Tests basic sanitation, that it will initialize the skeleton
-          ansible-galaxy collection init --collection-skeleton ansible_collection_template test_ns.test_collection
-      - name: test roles can be created
-        run: |-
-          set -ex
+          ansible-galaxy collection init --collection-skeleton "${{ github.workspace }}/ansible_collection_template" test_ns.test_collection
+          test_ns/test_collection/setup.sh
           cd test_ns/test_collection/roles
           # Create a test role
           ansible-galaxy init --role-skeleton "${{ github.workspace }}/meta_skeleton" test_role
