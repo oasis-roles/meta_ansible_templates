@@ -33,4 +33,5 @@ jobs:
               assert 1 == 1" > test_role/molecule/docker/tests/test_null.py
           # Run molecule
           cd ..
+          tox -e lint_all
           tox --ansible-driver docker
