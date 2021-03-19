@@ -20,9 +20,9 @@ cd roles
 ansible-galaxy init --role-skeleton "${workspace}/role" test_role
 echo "
 def test_true(host):
-    assert 1 == 1" > test_role/molecule/docker/tests/test_null.py
+    assert 1 == 1" > test_role/molecule/container/tests/test_null.py
 
 # Run molecule
 cd ..
 tox -e lint_all
-tox --ansible-driver docker
+tox --ansible-driver podman
