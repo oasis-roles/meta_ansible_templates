@@ -29,12 +29,8 @@ jobs:
         run: |
           set -ex
           python -m pip install --upgrade tox
-      - name: Collect dependencies
-        id: collection
-        run: |
-          set -ex
-          json="$(tox -ql --ansible-driver docker --ansible-driver podman | python -c 'import json; import sys; print(json.dumps(sys.stdin.read().strip().split("\n"))))"
-          echo "::set-output name=scenarios::${json}"
+      - id: collection
+        uses: greg-hellings/tox-list@v1
 
   build:
     needs: collect
@@ -65,7 +61,7 @@ jobs:
           # I haven't found any logic for it, but if you don't do this mv, then
           # the dependency step in molecule when run from tox will fail
           mv ansible_collections ~/work/
-          {% raw %}cd "~/work/${{ env.checkout_path }}{% endraw %}"
+          {% raw %}cd ~/work/"${{ env.checkout_path }}{% endraw %}"
           tox -e "{% raw %}${{ matrix.scenario }}{% endraw %}"
 
   release:
