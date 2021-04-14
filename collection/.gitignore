@@ -10,3 +10,4 @@ __pycache__
 .tox
 junit.xml
 pytestdebug.log
+.cache

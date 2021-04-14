@@ -10,7 +10,7 @@ name: Test with Ansible
     - cron: "12 0 * * *"
 
 env:
-  TOX_ANSIBLE_DRIVER: docker
+  TOX_ANSIBLE_DRIVER: podman
   ANSIBLE_COLLECTIONS_PATHS: ~/.ansible/:~/work/
   checkout_path: ansible_collections/{{ namespace }}/{{ collection_name }}
 
