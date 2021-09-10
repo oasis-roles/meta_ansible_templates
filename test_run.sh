@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -ex -o pipefail
 
 workspace="$(pwd)"
 # Create the Ansible structure
@@ -25,4 +25,4 @@ def test_true(host):
 # Run molecule
 cd ..
 tox -e lint_all
-tox --ansible-driver podman
+tox --ansible-driver podman --ansible-driver docker --ansible-driver containers
